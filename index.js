@@ -1,3 +1,4 @@
+if (process.env.NODE_ENV !== 'production') { require('dotenv').config() }
 require('dotenv').config();
 const express = require('express');
 const server = express();
@@ -26,6 +27,7 @@ const { Order } = require('./model/Order');
 const { env } = require('process');
 
 // Webhook
+
 
 const endpointSecret = process.env.ENDPOINT_SECRET;
 
@@ -89,10 +91,13 @@ server.use(
     exposedHeaders: ['X-Total-Count'],
   })
 );
+
 server.use(express.json()); // to parse req.body
 
-server.use('/products', isAuth(), productsRouter.router);
+ server.use('/products', isAuth(), productsRouter.router);
+
 // we can also use JWT token for client-only auth
+
 server.use('/categories', isAuth(), categoriesRouter.router);
 server.use('/brands', isAuth(), brandsRouter.router);
 server.use('/users', isAuth(), usersRouter.router);
@@ -200,6 +205,7 @@ server.post('/create-payment-intent', async (req, res) => {
   });
 });
 
+
 main().catch((err) => console.log(err));
 
 async function main() {
@@ -208,5 +214,5 @@ async function main() {
 }
 
 server.listen(process.env.PORT, () => {
-  console.log('server started');
+  console.log(`server started at ${process.env.PORT} `);
 });
